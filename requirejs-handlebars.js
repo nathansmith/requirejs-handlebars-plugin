@@ -1,4 +1,4 @@
-define(['handlebars'], function(handlebars) {
+define(function() {
 
 	var buildMap = {};
 
@@ -7,14 +7,13 @@ define(['handlebars'], function(handlebars) {
 		load: function(name, parentRequire, onload, config) {
 
 			if (config.isBuild) {
-				var fs = nodeRequire('fs');
+				var fs = require.nodeRequire('fs');
 				var fsPath = config.dirBaseUrl + '/' + name + '.html';
 				buildMap[name] = fs.readFileSync(fsPath).toString();
 				onload();
 			} else {
-				parentRequire(['text!' + name + '.html'], function(raw) {
-					onload(handlebars.
-				default.compile(raw));
+				parentRequire(['text!' + name + '.html', 'handlebars'], function(raw, handlebars) {
+					onload(handlebars.default.compile(raw));
 				});
 			}
 
@@ -22,14 +21,15 @@ define(['handlebars'], function(handlebars) {
 
 		write: function(pluginName, name, write) {
 
-			var Handlebars = require.nodeRequire('handlebars');
-			var compiled = Handlebars.precompile(buildMap[name]);
+			var handlebars = require.nodeRequire('handlebars');
+			var compiled = handlebars.precompile(buildMap[name]);
 
 			write(
-				'define("html!' + name + '", ["handlebars.runtime"], function(handlebars){ \n' +
+				'define("html!' + name + '", ["handlebars"], function(handlebars){ \n' +
 					'return handlebars.default.template(' + compiled.toString() + ');\n' +
 				'});\n'
 			);
+
 		}
 
 	};
