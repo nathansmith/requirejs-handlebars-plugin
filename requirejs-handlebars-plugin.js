@@ -21,7 +21,7 @@ define(function() {
 				parentRequire(['text!' + name + '.html', 'handlebars'], function(raw, handlebars) {
 
 					// once loaded, compile it with Handlebars
-					onload(handlebars.default.compile(raw));
+					onload(handlebars['default'].compile(raw));
 
 				});
 
