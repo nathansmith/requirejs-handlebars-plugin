@@ -40,7 +40,7 @@ define(function() {
 			// put the compiled template inside an AMD wrapper
 			write(
 				'define("html!' + name + '", ["handlebars"], function(handlebars){ \n' +
-					'return handlebars.default.template(' + compiled.toString() + ');\n' +
+					'return handlebars["default"].template(' + compiled.toString() + ');\n' +
 				'});\n'
 			);
 
