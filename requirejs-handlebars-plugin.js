@@ -12,7 +12,7 @@ define(function() {
 				// during R.js build, use Node to load the template
 				var fs = require.nodeRequire('fs');
 				var fsPath = config.dirBaseUrl + '/' + name + '.html';
-				templates[name] = fs.readFileSync(fsPath).toString();
+				templates[name] = fs.readFileSync(fsPath).toString().replace(/\s+/g, ' ');
 				onload();
 
 			} else {
@@ -21,7 +21,7 @@ define(function() {
 				parentRequire(['text!' + name + '.html', 'handlebars'], function(raw, handlebars) {
 
 					// once loaded, compile it with Handlebars
-					onload(handlebars['default'].compile(raw));
+					onload(handlebars['default'].compile(raw).replace(/\s+/g, ' '));
 
 				});
 
@@ -40,7 +40,7 @@ define(function() {
 			// put the compiled template inside an AMD wrapper
 			write(
 				'define("html!' + name + '", ["handlebars"], function(handlebars){ \n' +
-					'return handlebars["default"].template(' + compiled.toString() + ');\n' +
+					'return handlebars["default"].template(' + compiled.toString().replace(/\s+/g, ' ') + ');\n' +
 				'});\n'
 			);
 
